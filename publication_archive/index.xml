@@ -2,14 +2,14 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Publications | Nuttapong La-ongtup</title>
-    <link>/publication_archive/</link>
-      <atom:link href="/publication_archive/index.xml" rel="self" type="application/rss+xml" />
+    <link>https://nlaongtup.github.io/publication_archive/</link>
+      <atom:link href="https://nlaongtup.github.io/publication_archive/index.xml" rel="self" type="application/rss+xml" />
     <description>Publications</description>
     <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language>
     <image>
-      <url>/img/icon-192.png</url>
+      <url>https://nlaongtup.github.io/img/icon-192.png</url>
       <title>Publications</title>
-      <link>/publication_archive/</link>
+      <link>https://nlaongtup.github.io/publication_archive/</link>
     </image>
     
   </channel>
