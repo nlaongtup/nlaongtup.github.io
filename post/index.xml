@@ -21,7 +21,7 @@
 
 &lt;p&gt;Making a kinetics Monte Carlo platform using SciPy and LAMMP.&lt;/p&gt;
 
-&lt;h3 id=&#34;example-output&#34;&gt;Example output&lt;/h3&gt;
+&lt;h2 id=&#34;example-output&#34;&gt;Example output&lt;/h2&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;KMC step 1
 ABC step 1 displacement = 0.227
@@ -316,7 +316,7 @@ def optimize_wrapper(atomic_position):
     return optimization_result
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2 id=&#34;neb-wrapper&#34;&gt;NEB wrapper&lt;/h2&gt;
+&lt;h3 id=&#34;neb-wrapper&#34;&gt;NEB wrapper&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;class NEB:
 
@@ -653,20 +653,20 @@ ABC+NEB calculation time: 457.05262541770935
     </item>
     
     <item>
-      <title>Keras deep learning front-end for Tensorflow (Upcoming)</title>
+      <title>Keras deep learning front-end for Tensorflow</title>
       <link>https://nlaongtup.github.io/post/tensorflow-keras/</link>
       <pubDate>Sun, 06 Oct 2019 00:02:00 +0000</pubDate>
       <guid>https://nlaongtup.github.io/post/tensorflow-keras/</guid>
-      <description>&lt;p&gt;Upcoming content&amp;hellip;&lt;/p&gt;
+      <description>&lt;p&gt;Upcoming content. Stay tuned!&lt;/p&gt;
 </description>
     </item>
     
     <item>
-      <title>Django: The most convenient python web application platform. (Upcoming)</title>
+      <title>Django: The most convenient python web application platform.</title>
       <link>https://nlaongtup.github.io/post/djnago-sklearn/</link>
       <pubDate>Sun, 06 Oct 2019 00:01:00 +0000</pubDate>
       <guid>https://nlaongtup.github.io/post/djnago-sklearn/</guid>
-      <description>&lt;p&gt;Upcoming content&amp;hellip;&lt;/p&gt;
+      <description>&lt;p&gt;Upcoming content. Stay tuned!&lt;/p&gt;
 </description>
     </item>
     
