@@ -28,7 +28,7 @@
   
     
   
-  <meta name="description" content="Upcoming content. Stay tuned!">
+  <meta name="description" content="Using Keras-TensorFlow for Grad-CAM technique">
 
   
   <link rel="alternate" hreflang="en-us" href="https://nlaongtup.github.io/post/tensorflow-keras/">
@@ -124,14 +124,14 @@
   
   <meta property="og:site_name" content="Nuttapong La-ongtup">
   <meta property="og:url" content="https://nlaongtup.github.io/post/tensorflow-keras/">
-  <meta property="og:title" content="Keras deep learning front-end for Tensorflow | Nuttapong La-ongtup">
-  <meta property="og:description" content="Upcoming content. Stay tuned!"><meta property="og:image" content="https://nlaongtup.github.io/post/tensorflow-keras/featured.png">
+  <meta property="og:title" content="Keras-TensorFlow Implementation of Grad-CAM Class Activation Visualization | Nuttapong La-ongtup">
+  <meta property="og:description" content="Using Keras-TensorFlow for Grad-CAM technique"><meta property="og:image" content="https://nlaongtup.github.io/post/tensorflow-keras/featured.png">
   <meta property="twitter:image" content="https://nlaongtup.github.io/post/tensorflow-keras/featured.png"><meta property="og:locale" content="en-us">
   
     
-      <meta property="article:published_time" content="2019-10-06T00:02:00&#43;00:00">
+      <meta property="article:published_time" content="2021-04-15T00:02:00&#43;00:00">
     
-    <meta property="article:modified_time" content="2019-10-06T00:02:00&#43;00:00">
+    <meta property="article:modified_time" content="2021-04-15T00:02:00&#43;00:00">
   
 
   
@@ -170,14 +170,14 @@
     "@type": "WebPage",
     "@id": "https://nlaongtup.github.io/post/tensorflow-keras/"
   },
-  "headline": "Keras deep learning front-end for Tensorflow",
+  "headline": "Keras-TensorFlow Implementation of Grad-CAM Class Activation Visualization",
   
   "image": [
     "https://nlaongtup.github.io/post/tensorflow-keras/featured.png"
   ],
   
-  "datePublished": "2019-10-06T00:02:00Z",
-  "dateModified": "2019-10-06T00:02:00Z",
+  "datePublished": "2021-04-15T00:02:00Z",
+  "dateModified": "2021-04-15T00:02:00Z",
   
   "author": {
     "@type": "Person",
@@ -192,7 +192,7 @@
       "url": "https://nlaongtup.github.io/img/icon-512.png"
     }
   },
-  "description": "Upcoming content. Stay tuned!"
+  "description": "Using Keras-TensorFlow for Grad-CAM technique"
 }
 </script>
 
@@ -210,7 +210,7 @@
 
 
 
-  <title>Keras deep learning front-end for Tensorflow | Nuttapong La-ongtup</title>
+  <title>Keras-TensorFlow Implementation of Grad-CAM Class Activation Visualization | Nuttapong La-ongtup</title>
 
 </head>
 
@@ -433,7 +433,7 @@
 
 
 <div class="article-container pt-3">
-  <h1>Keras deep learning front-end for Tensorflow</h1>
+  <h1>Keras-TensorFlow Implementation of Grad-CAM Class Activation Visualization</h1>
 
   
 
@@ -464,7 +464,7 @@
     
       
     
-    Oct 6, 2019
+    Apr 15, 2021
   </span>
   
 
@@ -504,9 +504,9 @@
 </div>
 
 
-<div class="article-header article-container featured-image-wrapper mt-4 mb-4" style="max-width: 720px; max-height: 413px;">
+<div class="article-header article-container featured-image-wrapper mt-4 mb-4" style="max-width: 720px; max-height: 681px;">
   <div style="position: relative">
-    <img src="/post/tensorflow-keras/featured_hu73dac5a307e54f2bef0b80a8bc0583d0_22600_720x0_resize_lanczos_2.png" alt="" class="featured-image">
+    <img src="/post/tensorflow-keras/featured_hub3b90a2c07c25921db79c2e1d56d78cf_4393693_720x0_resize_lanczos_2.png" alt="" class="featured-image">
     
   </div>
 </div>
@@ -516,7 +516,143 @@
   <div class="article-container">
 
     <div class="article-style">
-      <p>Upcoming content. Stay tuned!</p>
+      
+
+<p>Have you ever wonder where convolutional neural network model is looking when predict a certain class? This is what Grad-CAM is for.</p>
+
+<p>This implementation is adapted from <a href="https://keras.io/examples/vision/grad_cam/" target="_blank">Grad-CAM class activation visualization</a> by <a href="https://twitter.com/fchollet" target="_blank">fchollet</a> and the technique Grad-CAM was developed by  Ramprasaath R. Selvaraju. et al.</p>
+
+<p><img src="./gradcam_2.JPG" alt="jpg" title="An illustration of Grad-CAM technique" /></p>
+
+<p>For full details about Grad-CAM technique, refer to this publication: <a href="https://arxiv.org/abs/1610.02391" target="_blank">https://arxiv.org/abs/1610.02391</a></p>
+
+<h3 id="related-tools">Related Tools</h3>
+
+<ul>
+<li>Keras-TensorFlow</li>
+<li>Xception model, pre-trained using ImageNet dataset (thanks to <a href="https://twitter.com/fchollet" target="_blank">fchollet</a>)</li>
+</ul>
+
+<p>Grad-CAM technique generate a heatmap where the significant features of predicted class are located, a class activation visualization so to speak.</p>
+
+<h4 id="setup">Setup</h4>
+
+<pre><code class="language-python">import numpy as np
+import tensorflow as tf
+from tensorflow import keras
+from IPython.display import Image, display
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+
+</code></pre>
+
+<h4 id="configure-xception-model-with-pre-trained-imagenet-dataset">Configure Xception model with pre-trained ImageNet dataset</h4>
+
+<pre><code class="language-python">model_builder = keras.applications.xception.Xception
+img_size = (299, 299)
+preprocess_input = keras.applications.xception.preprocess_input
+decode_predictions = keras.applications.xception.decode_predictions
+
+model = model_builder(weights=&quot;imagenet&quot;)
+model.layers[-1].activation = None
+
+</code></pre>
+
+<h4 id="the-grad-cam-algorithm-to-generate-the-grad-cam-heatmap-and-create-a-superimposed-visualization">The Grad-CAM algorithm to generate the Grad-CAM heatmap and create a superimposed visualization</h4>
+
+<pre><code class="language-python">def get_img_array(img_path, size):
+    img = keras.preprocessing.image.load_img(img_path, target_size=size)
+    array = keras.preprocessing.image.img_to_array(img)
+    array = np.expand_dims(array, axis=0)
+    return array
+
+
+def make_gradcam_heatmap(img_array, model, last_conv_layer_name, pred_index=None):
+    grad_model = tf.keras.models.Model(
+        [model.inputs], [model.get_layer(last_conv_layer_name).output, model.output]
+    )
+    with tf.GradientTape() as tape:
+        last_conv_layer_output, preds = grad_model(img_array)
+        if pred_index is None:
+            pred_index = tf.argmax(preds[0])
+        class_channel = preds[:, pred_index]
+    grads = tape.gradient(class_channel, last_conv_layer_output)
+    pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))
+
+    last_conv_layer_output = last_conv_layer_output[0]
+    heatmap = last_conv_layer_output @ pooled_grads[..., tf.newaxis]
+    heatmap = tf.squeeze(heatmap)
+
+    heatmap = tf.maximum(heatmap, 0) / tf.math.reduce_max(heatmap)
+    return heatmap.numpy()
+
+    def save_and_display_gradcam(img_path, heatmap, cam_path=&quot;cam.jpg&quot;, alpha=0.4):
+
+        img = keras.preprocessing.image.load_img(img_path)
+        img = keras.preprocessing.image.img_to_array(img)
+
+        heatmap = np.uint8(255 * heatmap)
+        jet = cm.get_cmap(&quot;jet&quot;)
+
+        jet_colors = jet(np.arange(256))[:, :3]
+        jet_heatmap = jet_colors[heatmap]
+
+        jet_heatmap = keras.preprocessing.image.array_to_img(jet_heatmap)
+        jet_heatmap = jet_heatmap.resize((img.shape[1], img.shape[0]))
+        jet_heatmap = keras.preprocessing.image.img_to_array(jet_heatmap)
+
+        superimposed_img = jet_heatmap * alpha + img
+        superimposed_img = keras.preprocessing.image.array_to_img(superimposed_img)
+
+        superimposed_img.save(cam_path)
+        display(Image(cam_path))
+
+</code></pre>
+
+<h4 id="prepare-a-test-image">Prepare a test image</h4>
+
+<pre><code class="language-python">
+img_path = keras.utils.get_file(
+    &quot;african_elephant.jpg&quot;, &quot;https://i.imgur.com/w4bkT7P.jpg&quot;
+)
+img_array = preprocess_input(get_img_array(img_path, size=img_size))
+
+display(Image(img_path))
+</code></pre>
+
+<p>test image:
+<img src="./gradcam_3.jpg" alt="jpg" title="test image" /></p>
+
+<h4 id="predict-a-class-from-the-test-image">Predict a class from the test image</h4>
+
+<pre><code class="language-python">preds = model.predict(img_array)
+print(&quot;Predicted:&quot;, decode_predictions(preds, top=1)[0])
+</code></pre>
+
+<h4 id="prediction-output">Prediction output</h4>
+
+<pre><code class="language-python">Predicted: [('n02412080', 'ram', 9.088227)]
+</code></pre>
+
+<h4 id="generate-an-activation-heatmap-of-the-predicted-class">Generate an Activation Heatmap of the Predicted Class</h4>
+
+<pre><code class="language-python">save_and_display_gradcam(img_path, heatmap)
+</code></pre>
+
+<p>The class activation heatmap over the original image:
+<img src="./gradcam_4.jpg" alt="jpg" title="test image" /></p>
+
+<p>Voilà! That red color region is where the &ldquo;ram&rdquo; feature located. Now we finally know what Convolutional Neural Network was looking at when they predict the class &ldquo;ram&rdquo;.</p>
+
+<p>What is &ldquo;ram&rdquo; anyway. I&rsquo;ve always thought it&rsquo;s a &ldquo;sheep&rdquo; that I took a selfie with!!! XD</p>
+
+<p>By the way, stay tuned! next time I will implement more about popular computer vision techniques like</p>
+
+<ul>
+<li>Transfer Learning</li>
+<li>Semantic Segmentation</li>
+<li>Object Detection etc.</li>
+</ul>
 
     </div>
 
@@ -563,7 +699,7 @@
     <div class="media-body">
       <h5 class="card-title"><a href="https://nlaongtup.github.io/">Nuttapong La-ongtup</a></h5>
       
-      <p class="card-text">My interests include data Science, machine learning, high performance computing and programmable matter.</p>
+      <p class="card-text">&ldquo;If I have seen further it is by standing on the shoulders of Giants&rdquo; - Isaac Newton</p>
       <ul class="network-icon" aria-hidden="true">
         
           
@@ -629,23 +765,6 @@
           <li>
             <a href="https://docs.microsoft.com/en-us/users/nlaongtup/" target="_blank" rel="noopener">
               <i class="fab fa-microsoft"></i>
-            </a>
-          </li>
-        
-          
-          
-          
-            
-          
-          
-          
-          
-          
-            
-          
-          <li>
-            <a href="https://www.facebook.com/harunaoto13" target="_blank" rel="noopener">
-              <i class="fab fa-facebook"></i>
             </a>
           </li>
         

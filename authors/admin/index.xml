@@ -5,12 +5,157 @@
     <link>https://nlaongtup.github.io/authors/admin/</link>
       <atom:link href="https://nlaongtup.github.io/authors/admin/index.xml" rel="self" type="application/rss+xml" />
     <description>Nuttapong La-ongtup</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sun, 06 Oct 2019 00:03:00 +0000</lastBuildDate>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Thu, 15 Apr 2021 00:02:00 +0000</lastBuildDate>
     <image>
       <url>https://nlaongtup.github.io/img/icon-192.png</url>
       <title>Nuttapong La-ongtup</title>
       <link>https://nlaongtup.github.io/authors/admin/</link>
     </image>
+    
+    <item>
+      <title>Keras-TensorFlow Implementation of Grad-CAM Class Activation Visualization</title>
+      <link>https://nlaongtup.github.io/post/tensorflow-keras/</link>
+      <pubDate>Thu, 15 Apr 2021 00:02:00 +0000</pubDate>
+      <guid>https://nlaongtup.github.io/post/tensorflow-keras/</guid>
+      <description>
+
+&lt;p&gt;Have you ever wonder where convolutional neural network model is looking when predict a certain class? This is what Grad-CAM is for.&lt;/p&gt;
+
+&lt;p&gt;This implementation is adapted from &lt;a href=&#34;https://keras.io/examples/vision/grad_cam/&#34; target=&#34;_blank&#34;&gt;Grad-CAM class activation visualization&lt;/a&gt; by &lt;a href=&#34;https://twitter.com/fchollet&#34; target=&#34;_blank&#34;&gt;fchollet&lt;/a&gt; and the technique Grad-CAM was developed by  Ramprasaath R. Selvaraju. et al.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;./gradcam_2.JPG&#34; alt=&#34;jpg&#34; title=&#34;An illustration of Grad-CAM technique&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;For full details about Grad-CAM technique, refer to this publication: &lt;a href=&#34;https://arxiv.org/abs/1610.02391&#34; target=&#34;_blank&#34;&gt;https://arxiv.org/abs/1610.02391&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;related-tools&#34;&gt;Related Tools&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Keras-TensorFlow&lt;/li&gt;
+&lt;li&gt;Xception model, pre-trained using ImageNet dataset (thanks to &lt;a href=&#34;https://twitter.com/fchollet&#34; target=&#34;_blank&#34;&gt;fchollet&lt;/a&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Grad-CAM technique generate a heatmap where the significant features of predicted class are located, a class activation visualization so to speak.&lt;/p&gt;
+
+&lt;h4 id=&#34;setup&#34;&gt;Setup&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import numpy as np
+import tensorflow as tf
+from tensorflow import keras
+from IPython.display import Image, display
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;configure-xception-model-with-pre-trained-imagenet-dataset&#34;&gt;Configure Xception model with pre-trained ImageNet dataset&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;model_builder = keras.applications.xception.Xception
+img_size = (299, 299)
+preprocess_input = keras.applications.xception.preprocess_input
+decode_predictions = keras.applications.xception.decode_predictions
+
+model = model_builder(weights=&amp;quot;imagenet&amp;quot;)
+model.layers[-1].activation = None
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;the-grad-cam-algorithm-to-generate-the-grad-cam-heatmap-and-create-a-superimposed-visualization&#34;&gt;The Grad-CAM algorithm to generate the Grad-CAM heatmap and create a superimposed visualization&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def get_img_array(img_path, size):
+    img = keras.preprocessing.image.load_img(img_path, target_size=size)
+    array = keras.preprocessing.image.img_to_array(img)
+    array = np.expand_dims(array, axis=0)
+    return array
+
+
+def make_gradcam_heatmap(img_array, model, last_conv_layer_name, pred_index=None):
+    grad_model = tf.keras.models.Model(
+        [model.inputs], [model.get_layer(last_conv_layer_name).output, model.output]
+    )
+    with tf.GradientTape() as tape:
+        last_conv_layer_output, preds = grad_model(img_array)
+        if pred_index is None:
+            pred_index = tf.argmax(preds[0])
+        class_channel = preds[:, pred_index]
+    grads = tape.gradient(class_channel, last_conv_layer_output)
+    pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))
+
+    last_conv_layer_output = last_conv_layer_output[0]
+    heatmap = last_conv_layer_output @ pooled_grads[..., tf.newaxis]
+    heatmap = tf.squeeze(heatmap)
+
+    heatmap = tf.maximum(heatmap, 0) / tf.math.reduce_max(heatmap)
+    return heatmap.numpy()
+
+    def save_and_display_gradcam(img_path, heatmap, cam_path=&amp;quot;cam.jpg&amp;quot;, alpha=0.4):
+
+        img = keras.preprocessing.image.load_img(img_path)
+        img = keras.preprocessing.image.img_to_array(img)
+
+        heatmap = np.uint8(255 * heatmap)
+        jet = cm.get_cmap(&amp;quot;jet&amp;quot;)
+
+        jet_colors = jet(np.arange(256))[:, :3]
+        jet_heatmap = jet_colors[heatmap]
+
+        jet_heatmap = keras.preprocessing.image.array_to_img(jet_heatmap)
+        jet_heatmap = jet_heatmap.resize((img.shape[1], img.shape[0]))
+        jet_heatmap = keras.preprocessing.image.img_to_array(jet_heatmap)
+
+        superimposed_img = jet_heatmap * alpha + img
+        superimposed_img = keras.preprocessing.image.array_to_img(superimposed_img)
+
+        superimposed_img.save(cam_path)
+        display(Image(cam_path))
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;prepare-a-test-image&#34;&gt;Prepare a test image&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;
+img_path = keras.utils.get_file(
+    &amp;quot;african_elephant.jpg&amp;quot;, &amp;quot;https://i.imgur.com/w4bkT7P.jpg&amp;quot;
+)
+img_array = preprocess_input(get_img_array(img_path, size=img_size))
+
+display(Image(img_path))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;test image:
+&lt;img src=&#34;./gradcam_3.jpg&#34; alt=&#34;jpg&#34; title=&#34;test image&#34; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;predict-a-class-from-the-test-image&#34;&gt;Predict a class from the test image&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;preds = model.predict(img_array)
+print(&amp;quot;Predicted:&amp;quot;, decode_predictions(preds, top=1)[0])
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;prediction-output&#34;&gt;Prediction output&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;Predicted: [(&#39;n02412080&#39;, &#39;ram&#39;, 9.088227)]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;generate-an-activation-heatmap-of-the-predicted-class&#34;&gt;Generate an Activation Heatmap of the Predicted Class&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;save_and_display_gradcam(img_path, heatmap)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The class activation heatmap over the original image:
+&lt;img src=&#34;./gradcam_4.jpg&#34; alt=&#34;jpg&#34; title=&#34;test image&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Voilà! That red color region is where the &amp;ldquo;ram&amp;rdquo; feature located. Now we finally know what Convolutional Neural Network was looking at when they predict the class &amp;ldquo;ram&amp;rdquo;.&lt;/p&gt;
+
+&lt;p&gt;What is &amp;ldquo;ram&amp;rdquo; anyway. I&amp;rsquo;ve always thought it&amp;rsquo;s a &amp;ldquo;sheep&amp;rdquo; that I took a selfie with!!! XD&lt;/p&gt;
+
+&lt;p&gt;By the way, stay tuned! next time I will implement more about popular computer vision techniques like&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Transfer Learning&lt;/li&gt;
+&lt;li&gt;Semantic Segmentation&lt;/li&gt;
+&lt;li&gt;Object Detection etc.&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
     
     <item>
       <title>Using SciPy and LAMMP for Kinetic Monte Carlo Platform</title>
@@ -653,16 +798,7 @@ ABC+NEB calculation time: 457.05262541770935
     </item>
     
     <item>
-      <title>Keras deep learning front-end for Tensorflow</title>
-      <link>https://nlaongtup.github.io/post/tensorflow-keras/</link>
-      <pubDate>Sun, 06 Oct 2019 00:02:00 +0000</pubDate>
-      <guid>https://nlaongtup.github.io/post/tensorflow-keras/</guid>
-      <description>&lt;p&gt;Upcoming content. Stay tuned!&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Django: The most convenient python web application platform.</title>
+      <title>Django &#43; PythonAnywhere: A free and convenient way to deploy python web application</title>
       <link>https://nlaongtup.github.io/post/djnago-sklearn/</link>
       <pubDate>Sun, 06 Oct 2019 00:01:00 +0000</pubDate>
       <guid>https://nlaongtup.github.io/post/djnago-sklearn/</guid>
