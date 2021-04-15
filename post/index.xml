@@ -23,7 +23,7 @@
 
 &lt;p&gt;This implementation is adapted from &lt;a href=&#34;https://keras.io/examples/vision/grad_cam/&#34; target=&#34;_blank&#34;&gt;Grad-CAM class activation visualization&lt;/a&gt; by &lt;a href=&#34;https://twitter.com/fchollet&#34; target=&#34;_blank&#34;&gt;fchollet&lt;/a&gt; and the technique Grad-CAM was developed by  Ramprasaath R. Selvaraju. et al.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;./gradcam_2.JPG&#34; alt=&#34;jpg&#34; title=&#34;An illustration of Grad-CAM technique&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;./gradcam_2.jpg&#34; alt=&#34;jpg&#34; title=&#34;An illustration of Grad-CAM technique&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;For full details about Grad-CAM technique, refer to this publication: &lt;a href=&#34;https://arxiv.org/abs/1610.02391&#34; target=&#34;_blank&#34;&gt;https://arxiv.org/abs/1610.02391&lt;/a&gt;&lt;/p&gt;
 
