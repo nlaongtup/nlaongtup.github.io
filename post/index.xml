@@ -151,8 +151,8 @@ print(&amp;quot;Predicted:&amp;quot;, decode_predictions(preds, top=1)[0])
 
 &lt;ul&gt;
 &lt;li&gt;Transfer Learning&lt;/li&gt;
-&lt;li&gt;Semantic Segmentation&lt;/li&gt;
-&lt;li&gt;Object Detection etc.&lt;/li&gt;
+&lt;li&gt;Object Detection&lt;/li&gt;
+&lt;li&gt;Image segmentation etc.&lt;/li&gt;
 &lt;/ul&gt;
 </description>
     </item>
