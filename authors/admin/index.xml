@@ -114,7 +114,7 @@ def make_gradcam_heatmap(img_array, model, last_conv_layer_name, pred_index=None
 
 &lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;
 img_path = keras.utils.get_file(
-    &amp;quot;african_elephant.jpg&amp;quot;, &amp;quot;https://i.imgur.com/w4bkT7P.jpg&amp;quot;
+    &amp;quot;test_image_01.jpg&amp;quot;, &amp;quot;https://i.imgur.com/w4bkT7P.jpg&amp;quot;
 )
 img_array = preprocess_input(get_img_array(img_path, size=img_size))
 
