@@ -47,7 +47,7 @@ import matplotlib.cm as cm
 
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h4 id=&#34;configure-xception-model-with-pre-trained-imagenet-dataset&#34;&gt;Configure Xception model with pre-trained ImageNet dataset&lt;/h4&gt;
+&lt;h4 id=&#34;configure-xception-model-pre-trained-with-imagenet-dataset&#34;&gt;Configure Xception model pre-trained with ImageNet dataset&lt;/h4&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;model_builder = keras.applications.xception.Xception
 img_size = (299, 299)
@@ -130,7 +130,7 @@ display(Image(img_path))
 print(&amp;quot;Predicted:&amp;quot;, decode_predictions(preds, top=1)[0])
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h4 id=&#34;prediction-output&#34;&gt;Prediction output&lt;/h4&gt;
+&lt;h4 id=&#34;predicted-output&#34;&gt;Predicted output&lt;/h4&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;Predicted: [(&#39;n02412080&#39;, &#39;ram&#39;, 9.088227)]
 &lt;/code&gt;&lt;/pre&gt;
