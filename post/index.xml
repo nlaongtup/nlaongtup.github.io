@@ -5,12 +5,297 @@
     <link>https://nlaongtup.github.io/post/</link>
       <atom:link href="https://nlaongtup.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     <description>Posts</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Thu, 15 Apr 2021 00:02:00 +0000</lastBuildDate>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Mon, 19 Apr 2021 00:01:00 +0000</lastBuildDate>
     <image>
       <url>https://nlaongtup.github.io/img/icon-192.png</url>
       <title>Posts</title>
       <link>https://nlaongtup.github.io/post/</link>
     </image>
+    
+    <item>
+      <title>AWS Rekognition API for Celebrity Recognition</title>
+      <link>https://nlaongtup.github.io/post/aws-recognition-api/</link>
+      <pubDate>Mon, 19 Apr 2021 00:01:00 +0000</pubDate>
+      <guid>https://nlaongtup.github.io/post/aws-recognition-api/</guid>
+      <description>
+
+&lt;h3 id=&#34;prerequisite&#34;&gt;Prerequisite&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Setup IAM user on AWS, see &lt;a href=&#34;https://docs.aws.amazon.com/rekognition/latest/dg/setting-up.html#setting-up-iam&#34; target=&#34;_blank&#34;&gt;create an IAM user&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Install AWS CLI and SDKs eg. boto3, see &lt;a href=&#34;https://docs.aws.amazon.com/rekognition/latest/dg/setup-awscli-sdk.html&#34; target=&#34;_blank&#34;&gt;set up the AWS CLI and AWS SDKs&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;setup&#34;&gt;Setup&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import boto3
+import json
+
+from six.moves.urllib.request import urlopen
+from six import BytesIO
+
+import numpy as np
+from PIL import Image
+from PIL import ImageColor
+from PIL import ImageDraw, ExifTags, ImageColor
+from PIL import ImageFont
+from PIL import ImageOps
+
+import tempfile
+import matplotlib.pyplot as plt
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;define-utility-function&#34;&gt;Define utility function&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def recognize_celebrities(photo):
+
+    client=boto3.client(&#39;rekognition&#39;)
+
+    with open(photo, &#39;rb&#39;) as image:
+        response = client.recognize_celebrities(Image={&#39;Bytes&#39;: image.read()})
+
+    return response
+
+def download_image(img_url):
+    open_image = urlopen(img_url)
+    image_data = open_image.read()
+    image_data = BytesIO(image_data)
+    pil_image = Image.open(image_data)
+    imgWidth, imgHeight = pil_image.size
+    pil_image = ImageOps.fit(pil_image, (imgWidth,imgHeight), Image.ANTIALIAS)
+    pil_image_rgb = pil_image.convert(&amp;quot;RGB&amp;quot;)
+    pil_image_rgb.save(&amp;quot;celeb.jpg&amp;quot;, format=&amp;quot;JPEG&amp;quot;, quality=90)
+
+def display_image(image):
+    fig = plt.figure(figsize=(15, 15))
+    plt.grid(False)
+    plt.imshow(image)
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;download-test-image&#34;&gt;Download test image&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;download_image(&amp;quot;https://upload.wikimedia.org/wikipedia/commons/2/2c/Lady_Gaga_interview_2016.jpg&amp;quot;)
+detect_img_path=&#39;celeb.jpg&#39;
+image = Image.open(detect_img_path)
+display_image(image)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;test image:
+&lt;img src=&#34;./aws-reg-01.png&#34; alt=&#34;jpg&#34; title=&#34;test image&#34; /&gt;
+Why Lady Gaga? because she is so talented, brilliant, incredible, amazing, show stopping, spectacular, never the same, totally unique, completely not ever been done before, unafraid to reference or not reference, put it in a blender, shit on it, vomit on it, eat it, give birth to it.
+&lt;img src=&#34;./aws-reg-02.gif&#34; alt=&#34;jpg&#34; title=&#34;Lady Gaga&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;OK, joking aside. Let&amp;rsquo;s continue :3&lt;/p&gt;
+
+&lt;h3 id=&#34;invoke-the-model-via-aws-rekognition-api&#34;&gt;Invoke the model via AWS Rekognition API&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;detect_img_path=&#39;celeb.jpg&#39;
+response = recognize_celebrities(detect_img_path)
+json_response = json.dumps(response, indent=4)
+print(json_response)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;we will receive a JSON formatted response like this&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;{
+    &amp;quot;CelebrityFaces&amp;quot;: [
+        {
+            &amp;quot;Urls&amp;quot;: [
+                &amp;quot;www.imdb.com/name/nm3078932&amp;quot;
+            ],
+            &amp;quot;Name&amp;quot;: &amp;quot;Lady Gaga&amp;quot;,
+            &amp;quot;Id&amp;quot;: &amp;quot;4Fn1Te4k&amp;quot;,
+            &amp;quot;Face&amp;quot;: {
+                &amp;quot;BoundingBox&amp;quot;: {
+                    &amp;quot;Width&amp;quot;: 0.4975884258747101,
+                    &amp;quot;Height&amp;quot;: 0.3868750035762787,
+                    &amp;quot;Left&amp;quot;: 0.18006430566310883,
+                    &amp;quot;Top&amp;quot;: 0.18000000715255737
+                },
+                &amp;quot;Confidence&amp;quot;: 99.99113464355469,
+                &amp;quot;Landmarks&amp;quot;: [
+                    {
+                        &amp;quot;Type&amp;quot;: &amp;quot;eyeLeft&amp;quot;,
+                        &amp;quot;X&amp;quot;: 0.3336140513420105,
+                        &amp;quot;Y&amp;quot;: 0.33852386474609375
+                    },
+                    {
+                        &amp;quot;Type&amp;quot;: &amp;quot;eyeRight&amp;quot;,
+                        &amp;quot;X&amp;quot;: 0.48979300260543823,
+                        &amp;quot;Y&amp;quot;: 0.33140549063682556
+                    },
+                    {
+                        &amp;quot;Type&amp;quot;: &amp;quot;nose&amp;quot;,
+                        &amp;quot;X&amp;quot;: 0.36879873275756836,
+                        &amp;quot;Y&amp;quot;: 0.4117993116378784
+                    },
+                    {
+                        &amp;quot;Type&amp;quot;: &amp;quot;mouthLeft&amp;quot;,
+                        &amp;quot;X&amp;quot;: 0.357170045375824,
+                        &amp;quot;Y&amp;quot;: 0.46853089332580566
+                    },
+                    {
+                        &amp;quot;Type&amp;quot;: &amp;quot;mouthRight&amp;quot;,
+                        &amp;quot;X&amp;quot;: 0.4952928423881531,
+                        &amp;quot;Y&amp;quot;: 0.4677777886390686
+                    }
+                ],
+                &amp;quot;Pose&amp;quot;: {
+                    &amp;quot;Roll&amp;quot;: -2.1802918910980225,
+                    &amp;quot;Yaw&amp;quot;: -24.470903396606445,
+                    &amp;quot;Pitch&amp;quot;: 0.10077361017465591
+                },
+                &amp;quot;Quality&amp;quot;: {
+                    &amp;quot;Brightness&amp;quot;: 80.43765258789062,
+                    &amp;quot;Sharpness&amp;quot;: 96.63640594482422
+                }
+            },
+            &amp;quot;MatchConfidence&amp;quot;: 72.0
+        }
+    ],
+    &amp;quot;UnrecognizedFaces&amp;quot;: [],
+    &amp;quot;OrientationCorrection&amp;quot;: &amp;quot;ROTATE_0&amp;quot;,
+    &amp;quot;ResponseMetadata&amp;quot;: {
+        &amp;quot;RequestId&amp;quot;: &amp;quot;36aabe95-3fe3-40ff-85e2-e637544b0564&amp;quot;,
+        &amp;quot;HTTPStatusCode&amp;quot;: 200,
+        &amp;quot;HTTPHeaders&amp;quot;: {
+            &amp;quot;content-type&amp;quot;: &amp;quot;application/x-amz-json-1.1&amp;quot;,
+            &amp;quot;date&amp;quot;: &amp;quot;Mon, 19 Apr 2021 09:56:57 GMT&amp;quot;,
+            &amp;quot;x-amzn-requestid&amp;quot;: &amp;quot;36aabe95-3fe3-40ff-85e2-e637544b0564&amp;quot;,
+            &amp;quot;content-length&amp;quot;: &amp;quot;850&amp;quot;,
+            &amp;quot;connection&amp;quot;: &amp;quot;keep-alive&amp;quot;
+        },
+        &amp;quot;RetryAttempts&amp;quot;: 0
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;check-the-json-response&#34;&gt;Check the JSON response&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;for celebrity in response[&#39;CelebrityFaces&#39;]:
+    print (&#39;Name: &#39; + celebrity[&#39;Name&#39;])
+    print (&#39;Match Confidence: &#39; + &#39;{:.2f}&#39;.format(celebrity[&#39;MatchConfidence&#39;]))
+    print (&#39;Info&#39;)
+    for url in celebrity[&#39;Urls&#39;]:
+        print (&#39;   &#39; + url)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now we can see the result more clearly. The result include Match Confidence which indicate how much the model is confidence that the recognized face is the celebrity. The result also the info website.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;Name: Lady Gaga
+Match Confidence: 72.00
+Info
+   www.imdb.com/name/nm3078932
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;draw-a-bounding-box-on-the-image&#34;&gt;Draw a bounding box on the image&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def draw_boxes(image_path, response):
+
+    image = Image.open(image_path)
+    draw = ImageDraw.Draw(image)
+    imgWidth, imgHeight = image.size
+
+    color = &#39;#00d400&#39;
+    font = ImageFont.truetype(&amp;quot;/usr/share/fonts/truetype/lato/Lato-Regular.ttf&amp;quot;,70)
+
+    for celebFace in response[&#39;CelebrityFaces&#39;]:
+
+        faceDetail = celebFace[&amp;quot;Face&amp;quot;]
+        box = faceDetail[&#39;BoundingBox&#39;]
+        left = imgWidth * box[&#39;Left&#39;]
+        top = imgHeight * box[&#39;Top&#39;]
+        width = imgWidth * box[&#39;Width&#39;]
+        height = imgHeight * box[&#39;Height&#39;]
+
+        points = (
+            (left,top),
+            (left + width, top),
+            (left + width, top + height),
+            (left , top + height),
+            (left, top)
+
+        )
+
+        display_str = celebFace[&#39;Name&#39;] +&amp;quot; &amp;quot;+ str(celebFace[&#39;MatchConfidence&#39;])+&amp;quot;%&amp;quot;
+        text_width, text_height = font.getsize(display_str)
+        margin = np.ceil(0.05 * text_height)
+        text_bottom = top
+
+        draw.line(points, fill=color, width=5)
+        draw.rectangle([(left, text_bottom - text_height - 2 * margin),
+                        (left + text_width, text_bottom)],
+                       fill=color)
+
+        draw.text((left + margin, text_bottom - text_height - margin),
+          display_str,
+          fill=&amp;quot;black&amp;quot;,
+          font=font)
+
+    return image
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;detect_img = &amp;quot;celeb.jpg&amp;quot;
+draw_image = draw_boxes(detect_img, response)
+if display:
+    display_image(draw_image)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;./aws-reg-03.png&#34; alt=&#34;jpg&#34; title=&#34;test image&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Paw up little monster, we did it!!!
+Now let&amp;rsquo;s try with other image shall we?&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;download_image(&amp;quot;https://pbs.twimg.com/media/BhxWutnCEAAtEQ6?format=jpg&amp;quot;)
+detect_img_path=&#39;celeb.jpg&#39;
+response = recognize_celebrities(detect_img_path)
+
+for celebrity in response[&#39;CelebrityFaces&#39;]:
+
+    print (&#39;Name: &#39; + celebrity[&#39;Name&#39;])
+    print (&#39;Match Confidence: &#39; + &#39;{:.2f}&#39;.format(celebrity[&#39;MatchConfidence&#39;]))
+    print (&#39;Info&#39;)
+    for url in celebrity[&#39;Urls&#39;]:
+        print (&#39;   &#39; + url)
+
+detect_img = &amp;quot;celeb.jpg&amp;quot;
+draw_image = draw_boxes(detect_img, response)
+if display:
+    display_image(draw_image)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;Name: Bradley Cooper
+Match Confidence: 100.00
+Info
+   www.imdb.com/name/nm0177896
+Name: Ellen DeGeneres
+Match Confidence: 100.00
+Info
+   www.imdb.com/name/nm0001122
+Name: Jennifer Lawrence
+Match Confidence: 67.00
+Info
+   www.imdb.com/name/nm2225369
+Name: Wayne Wonder
+Match Confidence: 69.00
+Info
+   www.imdb.com/name/nm0938872
+Name: Patrik Antonius
+Match Confidence: 67.00
+Info
+Name: Kevin Spacey
+Match Confidence: 60.00
+Info
+   www.imdb.com/name/nm0000228
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;./aws-reg-04.png&#34; alt=&#34;jpg&#34; title=&#34;test image&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Impressive! imagine how useful of this API on digital marketing, advertising, and media industry. Stay tuned for interesting Machine Learning story.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Keras-TensorFlow Implementation of Grad-CAM Class Activation Visualization</title>
@@ -794,15 +1079,6 @@ ABC+NEB calculation time: 457.05262541770935
 &lt;p&gt;&lt;img src=&#34;./03_KMC-test_working_25_5.png&#34; alt=&#34;png&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&#34;./03_KMC-test_working_25_6.png&#34; alt=&#34;png&#34; /&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Django &#43; PythonAnywhere: A free and convenient way to deploy python web application</title>
-      <link>https://nlaongtup.github.io/post/djnago-sklearn/</link>
-      <pubDate>Sun, 06 Oct 2019 00:01:00 +0000</pubDate>
-      <guid>https://nlaongtup.github.io/post/djnago-sklearn/</guid>
-      <description>&lt;p&gt;Upcoming content. Stay tuned!&lt;/p&gt;
 </description>
     </item>
     

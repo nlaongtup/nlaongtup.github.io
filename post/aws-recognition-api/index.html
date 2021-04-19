@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Source Themes Academic 4.5.0">
+
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Nuttapong La-ongtup">
+
+  
+  
+  
+    
+  
+  <meta name="description" content="Using AWS API to identify well known people for marketing, advertising and media industry use cases">
+
+  
+  <link rel="alternate" hreflang="en-us" href="https://nlaongtup.github.io/post/aws-recognition-api/">
+
+  
+
+
+  
+  
+  
+  <meta name="theme-color" content="#2962ff">
+  
+
+  
+  
+  
+  
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.0/css/all.css" integrity="sha384-aOkxzJ5uQz7WBObEZcHvV5JvRW3TUc2rNPA7pe3AwnsUohiw1Vj2Rgx2KSOkF5+h" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css" crossorigin="anonymous" title="hl-light">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark" disabled>
+        
+      
+    
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.2.0/leaflet.css" integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ==" crossorigin="anonymous">
+    
+
+    
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700%7CRoboto:400,400italic,700%7CRoboto+Mono&display=swap">
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/css/academic.min.04a87a1cb9027e3c50f566322527c56f.css">
+
+  
+
+  
+  
+    <script>
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-19207770-3', 'auto');
+      
+      ga('require', 'eventTracker');
+      ga('require', 'outboundLinkTracker');
+      ga('require', 'urlChangeTracker');
+      ga('send', 'pageview');
+    </script>
+    <script async src="https://www.google-analytics.com/analytics.js"></script>
+    
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/autotrack/2.4.1/autotrack.js" integrity="sha512-HUmooslVKj4m6OBu0OgzjXXr+QuFYy/k7eLI5jdeEy/F4RSgMn6XRWRGkFi5IFaFgy7uFTkegp3Z0XnJf3Jq+g==" crossorigin="anonymous"></script>
+    
+  
+  
+
+  
+
+  <link rel="manifest" href="/index.webmanifest">
+  <link rel="icon" type="image/png" href="/img/icon-32.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+  <link rel="canonical" href="https://nlaongtup.github.io/post/aws-recognition-api/">
+
+  
+  
+  
+  
+    
+  
+  
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="og:site_name" content="Nuttapong La-ongtup">
+  <meta property="og:url" content="https://nlaongtup.github.io/post/aws-recognition-api/">
+  <meta property="og:title" content="AWS Rekognition API for Celebrity Recognition | Nuttapong La-ongtup">
+  <meta property="og:description" content="Using AWS API to identify well known people for marketing, advertising and media industry use cases"><meta property="og:image" content="https://nlaongtup.github.io/post/aws-recognition-api/featured.png">
+  <meta property="twitter:image" content="https://nlaongtup.github.io/post/aws-recognition-api/featured.png"><meta property="og:locale" content="en-us">
+  
+    
+      <meta property="article:published_time" content="2021-04-19T00:01:00&#43;00:00">
+    
+    <meta property="article:modified_time" content="2021-04-19T00:01:00&#43;00:00">
+  
+
+  
+
+
+    
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://nlaongtup.github.io/post/aws-recognition-api/"
+  },
+  "headline": "AWS Rekognition API for Celebrity Recognition",
+  
+  "image": [
+    "https://nlaongtup.github.io/post/aws-recognition-api/featured.png"
+  ],
+  
+  "datePublished": "2021-04-19T00:01:00Z",
+  "dateModified": "2021-04-19T00:01:00Z",
+  
+  "author": {
+    "@type": "Person",
+    "name": "Nuttapong La-ongtup"
+  },
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "Nuttapong La-ongtup",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://nlaongtup.github.io/img/icon-512.png"
+    }
+  },
+  "description": "Using AWS API to identify well known people for marketing, advertising and media industry use cases"
+}
+</script>
+
+  
+
+  
+
+
+  
+
+
+  
+
+
+
+
+
+  <title>AWS Rekognition API for Celebrity Recognition | Nuttapong La-ongtup</title>
+
+</head>
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" >
+
+  <aside class="search-results" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search">
+        
+      </div>
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+  
+<nav class="navbar navbar-light fixed-top navbar-expand-lg py-0 compensate-for-scrollbar" id="navbar-main">
+  <div class="container">
+
+    
+      <a class="navbar-brand" href="/">Nuttapong La-ongtup</a>
+      
+      <button type="button" class="navbar-toggler" data-toggle="collapse"
+              data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span><i class="fas fa-bars"></i></span>
+      </button>
+      
+
+    
+    <div class="collapse navbar-collapse" id="navbar">
+
+      
+      
+      <ul class="navbar-nav ml-auto">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#about"><span>Home</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#posts"><span>Posts</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+          
+          
+          
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/#contact"><span>Contact</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+        
+        
+        
+        
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="/files/CV.pdf"><span>CV</span></a>
+        </li>
+
+        
+        
+
+      
+
+        
+
+        
+        <li class="nav-item">
+          <a class="nav-link js-search" href="#"><i class="fas fa-search" aria-hidden="true"></i></a>
+        </li>
+        
+
+        
+
+        
+        <li class="nav-item">
+          <a class="nav-link js-dark-toggle" href="#"><i class="fas fa-moon" aria-hidden="true"></i></a>
+        </li>
+        
+
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+  <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+<div class="article-container pt-3">
+  <h1>AWS Rekognition API for Celebrity Recognition</h1>
+
+  
+
+  
+
+
+
+<div class="article-metadata">
+
+  
+  
+  
+  
+  <div>
+    
+
+
+
+  <span><a href="/authors/admin/">Nuttapong La-ongtup</a></span>
+
+  </div>
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    Apr 19, 2021
+  </span>
+  
+
+  
+
+  
+
+  
+  
+  
+
+  
+  
+
+  
+    
+
+  
+
+</div>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+<div class="article-header article-container featured-image-wrapper mt-4 mb-4" style="max-width: 567px; max-height: 575px;">
+  <div style="position: relative">
+    <img src="/post/aws-recognition-api/featured.png" alt="" class="featured-image">
+    
+  </div>
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      
+
+<h3 id="prerequisite">Prerequisite</h3>
+
+<ol>
+<li><p>Setup IAM user on AWS, see <a href="https://docs.aws.amazon.com/rekognition/latest/dg/setting-up.html#setting-up-iam" target="_blank">create an IAM user</a></p></li>
+
+<li><p>Install AWS CLI and SDKs eg. boto3, see <a href="https://docs.aws.amazon.com/rekognition/latest/dg/setup-awscli-sdk.html" target="_blank">set up the AWS CLI and AWS SDKs</a></p></li>
+</ol>
+
+<h3 id="setup">Setup</h3>
+
+<pre><code class="language-python">import boto3
+import json
+
+from six.moves.urllib.request import urlopen
+from six import BytesIO
+
+import numpy as np
+from PIL import Image
+from PIL import ImageColor
+from PIL import ImageDraw, ExifTags, ImageColor
+from PIL import ImageFont
+from PIL import ImageOps
+
+import tempfile
+import matplotlib.pyplot as plt
+</code></pre>
+
+<h3 id="define-utility-function">Define utility function</h3>
+
+<pre><code class="language-python">def recognize_celebrities(photo):
+
+    client=boto3.client('rekognition')
+
+    with open(photo, 'rb') as image:
+        response = client.recognize_celebrities(Image={'Bytes': image.read()})
+
+    return response
+
+def download_image(img_url):
+    open_image = urlopen(img_url)
+    image_data = open_image.read()
+    image_data = BytesIO(image_data)
+    pil_image = Image.open(image_data)
+    imgWidth, imgHeight = pil_image.size
+    pil_image = ImageOps.fit(pil_image, (imgWidth,imgHeight), Image.ANTIALIAS)
+    pil_image_rgb = pil_image.convert(&quot;RGB&quot;)
+    pil_image_rgb.save(&quot;celeb.jpg&quot;, format=&quot;JPEG&quot;, quality=90)
+
+def display_image(image):
+    fig = plt.figure(figsize=(15, 15))
+    plt.grid(False)
+    plt.imshow(image)
+
+</code></pre>
+
+<h3 id="download-test-image">Download test image</h3>
+
+<pre><code class="language-python">download_image(&quot;https://upload.wikimedia.org/wikipedia/commons/2/2c/Lady_Gaga_interview_2016.jpg&quot;)
+detect_img_path='celeb.jpg'
+image = Image.open(detect_img_path)
+display_image(image)
+</code></pre>
+
+<p>test image:
+<img src="./aws-reg-01.png" alt="jpg" title="test image" />
+Why Lady Gaga? because she is so talented, brilliant, incredible, amazing, show stopping, spectacular, never the same, totally unique, completely not ever been done before, unafraid to reference or not reference, put it in a blender, shit on it, vomit on it, eat it, give birth to it.
+<img src="./aws-reg-02.gif" alt="jpg" title="Lady Gaga" /></p>
+
+<p>OK, joking aside. Let&rsquo;s continue :3</p>
+
+<h3 id="invoke-the-model-via-aws-rekognition-api">Invoke the model via AWS Rekognition API</h3>
+
+<pre><code class="language-python">detect_img_path='celeb.jpg'
+response = recognize_celebrities(detect_img_path)
+json_response = json.dumps(response, indent=4)
+print(json_response)
+</code></pre>
+
+<p>we will receive a JSON formatted response like this</p>
+
+<pre><code class="language-python">{
+    &quot;CelebrityFaces&quot;: [
+        {
+            &quot;Urls&quot;: [
+                &quot;www.imdb.com/name/nm3078932&quot;
+            ],
+            &quot;Name&quot;: &quot;Lady Gaga&quot;,
+            &quot;Id&quot;: &quot;4Fn1Te4k&quot;,
+            &quot;Face&quot;: {
+                &quot;BoundingBox&quot;: {
+                    &quot;Width&quot;: 0.4975884258747101,
+                    &quot;Height&quot;: 0.3868750035762787,
+                    &quot;Left&quot;: 0.18006430566310883,
+                    &quot;Top&quot;: 0.18000000715255737
+                },
+                &quot;Confidence&quot;: 99.99113464355469,
+                &quot;Landmarks&quot;: [
+                    {
+                        &quot;Type&quot;: &quot;eyeLeft&quot;,
+                        &quot;X&quot;: 0.3336140513420105,
+                        &quot;Y&quot;: 0.33852386474609375
+                    },
+                    {
+                        &quot;Type&quot;: &quot;eyeRight&quot;,
+                        &quot;X&quot;: 0.48979300260543823,
+                        &quot;Y&quot;: 0.33140549063682556
+                    },
+                    {
+                        &quot;Type&quot;: &quot;nose&quot;,
+                        &quot;X&quot;: 0.36879873275756836,
+                        &quot;Y&quot;: 0.4117993116378784
+                    },
+                    {
+                        &quot;Type&quot;: &quot;mouthLeft&quot;,
+                        &quot;X&quot;: 0.357170045375824,
+                        &quot;Y&quot;: 0.46853089332580566
+                    },
+                    {
+                        &quot;Type&quot;: &quot;mouthRight&quot;,
+                        &quot;X&quot;: 0.4952928423881531,
+                        &quot;Y&quot;: 0.4677777886390686
+                    }
+                ],
+                &quot;Pose&quot;: {
+                    &quot;Roll&quot;: -2.1802918910980225,
+                    &quot;Yaw&quot;: -24.470903396606445,
+                    &quot;Pitch&quot;: 0.10077361017465591
+                },
+                &quot;Quality&quot;: {
+                    &quot;Brightness&quot;: 80.43765258789062,
+                    &quot;Sharpness&quot;: 96.63640594482422
+                }
+            },
+            &quot;MatchConfidence&quot;: 72.0
+        }
+    ],
+    &quot;UnrecognizedFaces&quot;: [],
+    &quot;OrientationCorrection&quot;: &quot;ROTATE_0&quot;,
+    &quot;ResponseMetadata&quot;: {
+        &quot;RequestId&quot;: &quot;36aabe95-3fe3-40ff-85e2-e637544b0564&quot;,
+        &quot;HTTPStatusCode&quot;: 200,
+        &quot;HTTPHeaders&quot;: {
+            &quot;content-type&quot;: &quot;application/x-amz-json-1.1&quot;,
+            &quot;date&quot;: &quot;Mon, 19 Apr 2021 09:56:57 GMT&quot;,
+            &quot;x-amzn-requestid&quot;: &quot;36aabe95-3fe3-40ff-85e2-e637544b0564&quot;,
+            &quot;content-length&quot;: &quot;850&quot;,
+            &quot;connection&quot;: &quot;keep-alive&quot;
+        },
+        &quot;RetryAttempts&quot;: 0
+    }
+}
+</code></pre>
+
+<h3 id="check-the-json-response">Check the JSON response</h3>
+
+<pre><code class="language-python">for celebrity in response['CelebrityFaces']:
+    print ('Name: ' + celebrity['Name'])
+    print ('Match Confidence: ' + '{:.2f}'.format(celebrity['MatchConfidence']))
+    print ('Info')
+    for url in celebrity['Urls']:
+        print ('   ' + url)
+</code></pre>
+
+<p>Now we can see the result more clearly. The result include Match Confidence which indicate how much the model is confidence that the recognized face is the celebrity. The result also the info website.</p>
+
+<pre><code class="language-python">Name: Lady Gaga
+Match Confidence: 72.00
+Info
+   www.imdb.com/name/nm3078932
+</code></pre>
+
+<h3 id="draw-a-bounding-box-on-the-image">Draw a bounding box on the image</h3>
+
+<pre><code class="language-python">def draw_boxes(image_path, response):
+
+    image = Image.open(image_path)
+    draw = ImageDraw.Draw(image)
+    imgWidth, imgHeight = image.size
+
+    color = '#00d400'
+    font = ImageFont.truetype(&quot;/usr/share/fonts/truetype/lato/Lato-Regular.ttf&quot;,70)
+
+    for celebFace in response['CelebrityFaces']:
+
+        faceDetail = celebFace[&quot;Face&quot;]
+        box = faceDetail['BoundingBox']
+        left = imgWidth * box['Left']
+        top = imgHeight * box['Top']
+        width = imgWidth * box['Width']
+        height = imgHeight * box['Height']
+
+        points = (
+            (left,top),
+            (left + width, top),
+            (left + width, top + height),
+            (left , top + height),
+            (left, top)
+
+        )
+
+        display_str = celebFace['Name'] +&quot; &quot;+ str(celebFace['MatchConfidence'])+&quot;%&quot;
+        text_width, text_height = font.getsize(display_str)
+        margin = np.ceil(0.05 * text_height)
+        text_bottom = top
+
+        draw.line(points, fill=color, width=5)
+        draw.rectangle([(left, text_bottom - text_height - 2 * margin),
+                        (left + text_width, text_bottom)],
+                       fill=color)
+
+        draw.text((left + margin, text_bottom - text_height - margin),
+          display_str,
+          fill=&quot;black&quot;,
+          font=font)
+
+    return image
+</code></pre>
+
+<pre><code class="language-python">detect_img = &quot;celeb.jpg&quot;
+draw_image = draw_boxes(detect_img, response)
+if display:
+    display_image(draw_image)
+</code></pre>
+
+<p><img src="./aws-reg-03.png" alt="jpg" title="test image" /></p>
+
+<p>Paw up little monster, we did it!!!
+Now let&rsquo;s try with other image shall we?</p>
+
+<pre><code class="language-python">download_image(&quot;https://pbs.twimg.com/media/BhxWutnCEAAtEQ6?format=jpg&quot;)
+detect_img_path='celeb.jpg'
+response = recognize_celebrities(detect_img_path)
+
+for celebrity in response['CelebrityFaces']:
+
+    print ('Name: ' + celebrity['Name'])
+    print ('Match Confidence: ' + '{:.2f}'.format(celebrity['MatchConfidence']))
+    print ('Info')
+    for url in celebrity['Urls']:
+        print ('   ' + url)
+
+detect_img = &quot;celeb.jpg&quot;
+draw_image = draw_boxes(detect_img, response)
+if display:
+    display_image(draw_image)
+</code></pre>
+
+<pre><code class="language-python">Name: Bradley Cooper
+Match Confidence: 100.00
+Info
+   www.imdb.com/name/nm0177896
+Name: Ellen DeGeneres
+Match Confidence: 100.00
+Info
+   www.imdb.com/name/nm0001122
+Name: Jennifer Lawrence
+Match Confidence: 67.00
+Info
+   www.imdb.com/name/nm2225369
+Name: Wayne Wonder
+Match Confidence: 69.00
+Info
+   www.imdb.com/name/nm0938872
+Name: Patrik Antonius
+Match Confidence: 67.00
+Info
+Name: Kevin Spacey
+Match Confidence: 60.00
+Info
+   www.imdb.com/name/nm0000228
+</code></pre>
+
+<p><img src="./aws-reg-04.png" alt="jpg" title="test image" /></p>
+
+<p>Impressive! imagine how useful of this API on digital marketing, advertising, and media industry. Stay tuned for interesting Machine Learning story.</p>
+
+    </div>
+
+    
+
+
+    
+
+
+
+    
+      
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+  
+
+
+
+
+
+
+  
+  
+  
+    
+  
+  
+  <div class="media author-card">
+    
+      
+      <img class="portrait mr-3" src="/authors/admin/avatar_hu6731755d363b532d82bb1744ccd619ab_290514_250x250_fill_q90_lanczos_center.jpg" alt="Avatar">
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="https://nlaongtup.github.io/">Nuttapong La-ongtup</a></h5>
+      
+      <p class="card-text">&ldquo;If I have seen further it is by standing on the shoulders of Giants&rdquo; - Isaac Newton</p>
+      <ul class="network-icon" aria-hidden="true">
+        
+          
+          
+          
+            
+          
+          
+          
+          
+          
+          <li>
+            <a href="mailto:nuttapong.la@ku.th" >
+              <i class="fas fa-envelope"></i>
+            </a>
+          </li>
+        
+          
+          
+          
+            
+          
+          
+          
+          
+          
+            
+          
+          <li>
+            <a href="https://www.linkedin.com/in/nuttapong-la-ongtup-444345140/" target="_blank" rel="noopener">
+              <i class="fab fa-linkedin"></i>
+            </a>
+          </li>
+        
+          
+          
+          
+            
+          
+          
+          
+          
+          
+            
+          
+          <li>
+            <a href="https://github.com/nlaongtup" target="_blank" rel="noopener">
+              <i class="fab fa-github-square"></i>
+            </a>
+          </li>
+        
+          
+          
+          
+            
+          
+          
+          
+          
+          
+            
+          
+          <li>
+            <a href="https://docs.microsoft.com/en-us/users/nlaongtup/" target="_blank" rel="noopener">
+              <i class="fab fa-microsoft"></i>
+            </a>
+          </li>
+        
+          
+          
+          
+          
+          
+          
+          
+            
+          
+          <li>
+            <a href="/files/CV.pdf" >
+              <i class="ai ai-cv"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+
+
+      
+      
+    
+
+    
+
+    
+
+
+  </div>
+</article>
+
+      
+
+    
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js" integrity="sha256-aYTdUrn6Ow1DDgh5JTc3aDGnnju48y/1c8s1dgkYPQ8=" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/r.min.js"></script>
+        
+      
+
+      
+      
+    
+
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.2.0/leaflet.js" integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log==" crossorigin="anonymous"></script>
+    
+
+    
+    
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    
+    <script>
+      const search_index_filename = "/index.json";
+      const i18n = {
+        'placeholder': "Search...",
+        'results': "results found",
+        'no_results': "No results found"
+      };
+      const content_type = {
+        'post': "Posts",
+        'project': "Projects",
+        'publication' : "Publications",
+        'talk' : "Talks"
+        };
+    </script>
+    
+
+    
+    
+
+    
+    
+    <script id="search-hit-fuse-template" type="text/x-template">
+      <div class="search-hit" id="summary-{{key}}">
+      <div class="search-hit-content">
+        <div class="search-hit-name">
+          <a href="{{relpermalink}}">{{title}}</a>
+          <div class="article-metadata search-hit-type">{{type}}</div>
+          <p class="search-hit-description">{{snippet}}</p>
+        </div>
+      </div>
+      </div>
+    </script>
+    
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+      
+    
+    
+    
+    
+    <script src="/js/academic.min.130521ecfc6f534c52c158217bbff718.js"></script>
+
+    
+
+
+
+
+
+
+  
+  <div class="container">
+    <footer class="site-footer">
+  
+
+  <p class="powered-by">
+    
+
+    Powered by the
+    <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+    <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+
+    
+    <span class="float-right" aria-hidden="true">
+      <a href="#" id="back_to_top">
+        <span class="button_icon">
+          <i class="fas fa-chevron-up fa-2x"></i>
+        </span>
+      </a>
+    </span>
+    
+  </p>
+</footer>
+
+  </div>
+  
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
