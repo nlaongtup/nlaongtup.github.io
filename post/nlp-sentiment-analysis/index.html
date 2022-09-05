@@ -1,154 +1,178 @@
 <!DOCTYPE html>
 <html lang="en-us">
 
-<head>
+  <head>
 
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="generator" content="Source Themes Academic 4.5.0">
-
-  
-
-  
-  
-  
-  
-  
-    
-    
-    
-  
-  
-
-  <meta name="author" content="Nuttapong La-ongtup">
-
-  
-  
-  
-    
-  
-  <meta name="description" content="Using Transformer, PyTorch and Scikit-Learn">
-
-  
-  <link rel="alternate" hreflang="en-us" href="https://nlaongtup.github.io/post/nlp-sentiment-analysis/">
-
-  
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="generator" content="Source Themes Academic 4.5.0">
 
 
-  
-  
-  
-  <meta name="theme-color" content="#2962ff">
-  
 
-  
-  
-  
-  
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.0/css/all.css" integrity="sha384-aOkxzJ5uQz7WBObEZcHvV5JvRW3TUc2rNPA7pe3AwnsUohiw1Vj2Rgx2KSOkF5+h" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
 
-    
-    
-    
-      
-    
-    
-      
-      
-        
-          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css" crossorigin="anonymous" title="hl-light">
-          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark" disabled>
-        
-      
-    
 
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.2.0/leaflet.css" integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ==" crossorigin="anonymous">
-    
 
-    
 
-  
 
-  
-  
-  
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,700%7CRoboto:400,400italic,700%7CRoboto+Mono&display=swap">
-  
 
-  
-  
-  
-  <link rel="stylesheet" href="/css/academic.min.3b22c150b33731e873cb2255c65de711.css">
 
-  
 
-  
-  
-  
 
-  
 
-  <link rel="manifest" href="/index.webmanifest">
-  <link rel="icon" type="image/png" href="/img/icon-32.png">
-  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
 
-  <link rel="canonical" href="https://nlaongtup.github.io/post/nlp-sentiment-analysis/">
+    <meta name="author" content="Nuttapong La-ongtup">
 
-  
-  
-  
-  
-    
-  
-  
-  <meta property="twitter:card" content="summary_large_image">
-  
-  <meta property="og:site_name" content="Nuttapong La-ongtup">
-  <meta property="og:url" content="https://nlaongtup.github.io/post/nlp-sentiment-analysis/">
-  <meta property="og:title" content="Explore three difference NLP models for Sentiment Analysis: Logistic Regression, LSTM and BERT | Nuttapong La-ongtup">
-  <meta property="og:description" content="Using Transformer, PyTorch and Scikit-Learn"><meta property="og:image" content="https://nlaongtup.github.io/post/nlp-sentiment-analysis/featured.png">
-  <meta property="twitter:image" content="https://nlaongtup.github.io/post/nlp-sentiment-analysis/featured.png"><meta property="og:locale" content="en-us">
-  
-    
-      <meta property="article:published_time" content="2022-09-04T00:00:00&#43;00:00">
-    
+
+
+
+
+
+    <meta name="description" content="Using Transformer, PyTorch and Scikit-Learn">
+
+
+    <link rel="alternate" hreflang="en-us" href="https://nlaongtup.github.io/post/nlp-sentiment-analysis/">
+
+
+
+
+
+
+
+    <meta name="theme-color" content="#2962ff">
+
+
+
+
+
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css"
+      integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.0/css/all.css"
+      integrity="sha384-aOkxzJ5uQz7WBObEZcHvV5JvRW3TUc2rNPA7pe3AwnsUohiw1Vj2Rgx2KSOkF5+h" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css"
+      integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+
+
+
+
+
+
+
+
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css"
+      crossorigin="anonymous" title="hl-light">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/dracula.min.css"
+      crossorigin="anonymous" title="hl-dark" disabled>
+
+
+
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.2.0/leaflet.css"
+      integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ=="
+      crossorigin="anonymous">
+
+
+
+
+
+
+
+
+
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Montserrat:400,700%7CRoboto:400,400italic,700%7CRoboto+Mono&display=swap">
+
+
+
+
+
+    <link rel="stylesheet" href="/css/academic.min.3b22c150b33731e873cb2255c65de711.css">
+
+
+
+
+
+    <script>
+      window.ga = window.ga || function () { (ga.q = ga.q || []).push(arguments) }; ga.l = +new Date;
+      ga('create', 'UA-19207770-3', 'auto');
+
+      ga('require', 'eventTracker');
+      ga('require', 'outboundLinkTracker');
+      ga('require', 'urlChangeTracker');
+      ga('send', 'pageview');
+    </script>
+    <script async src="https://www.google-analytics.com/analytics.js"></script>
+
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/autotrack/2.4.1/autotrack.js"
+      integrity="sha512-HUmooslVKj4m6OBu0OgzjXXr+QuFYy/k7eLI5jdeEy/F4RSgMn6XRWRGkFi5IFaFgy7uFTkegp3Z0XnJf3Jq+g=="
+      crossorigin="anonymous"></script>
+
+
+
+    <link rel="manifest" href="/index.webmanifest">
+    <link rel="icon" type="image/png" href="/img/icon-32.png">
+    <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+    <link rel="canonical" href="https://nlaongtup.github.io/post/nlp-sentiment-analysis/">
+
+
+
+
+
+
+
+
+    <meta property="twitter:card" content="summary_large_image">
+
+    <meta property="og:site_name" content="Nuttapong La-ongtup">
+    <meta property="og:url" content="https://nlaongtup.github.io/post/nlp-sentiment-analysis/">
+    <meta property="og:title"
+      content="Explore three difference NLP models for Sentiment Analysis: Logistic Regression, LSTM and BERT | Nuttapong La-ongtup">
+    <meta property="og:description" content="Using Transformer, PyTorch and Scikit-Learn">
+    <meta property="og:image" content="https://nlaongtup.github.io/post/nlp-sentiment-analysis/featured.png">
+    <meta property="twitter:image" content="https://nlaongtup.github.io/post/nlp-sentiment-analysis/featured.png">
+    <meta property="og:locale" content="en-us">
+
+
+    <meta property="article:published_time" content="2022-09-04T00:00:00&#43;00:00">
+
     <meta property="article:modified_time" content="2022-09-04T00:00:00&#43;00:00">
-  
-
-  
-
-
-    
 
 
 
 
 
 
-  
 
 
 
 
 
-  
 
 
 
 
 
-  
 
 
 
 
 
-<script type="application/ld+json">
+
+
+
+
+
+
+
+
+
+    <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
@@ -182,349 +206,375 @@
 }
 </script>
 
-  
-
-  
-
-
-  
-
-
-  
 
 
 
 
 
-  <title>Explore three difference NLP models for Sentiment Analysis: Logistic Regression, LSTM and BERT | Nuttapong La-ongtup</title>
 
-</head>
 
-<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" >
 
-  <aside class="search-results" id="search">
-  <div class="container">
-    <section class="search-header">
 
-      <div class="row no-gutters justify-content-between mb-3">
-        <div class="col-6">
-          <h1>Search</h1>
+
+
+
+
+
+    <title>Explore three difference NLP models for Sentiment Analysis: Logistic Regression, LSTM and BERT | Nuttapong
+      La-ongtup</title>
+
+  </head>
+
+  <body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents">
+
+    <aside class="search-results" id="search">
+      <div class="container">
+        <section class="search-header">
+
+          <div class="row no-gutters justify-content-between mb-3">
+            <div class="col-6">
+              <h1>Search</h1>
+            </div>
+            <div class="col-6 col-search-close">
+              <a class="js-search" href="#"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+            </div>
+          </div>
+
+          <div id="search-box">
+
+            <input name="q" id="search-query" placeholder="Search..." autocapitalize="off" autocomplete="off"
+              autocorrect="off" spellcheck="false" type="search">
+
+          </div>
+
+        </section>
+        <section class="section-search-results">
+
+          <div id="search-hits">
+
+          </div>
+
+        </section>
+      </div>
+    </aside>
+
+
+
+    <nav class="navbar navbar-light fixed-top navbar-expand-lg py-0 compensate-for-scrollbar" id="navbar-main">
+      <div class="container">
+
+
+        <a class="navbar-brand" href="/">Nuttapong La-ongtup</a>
+
+        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar" aria-controls="navbar"
+          aria-expanded="false" aria-label="Toggle navigation">
+          <span><i class="fas fa-bars"></i></span>
+        </button>
+
+
+
+        <div class="collapse navbar-collapse" id="navbar">
+
+
+
+          <ul class="navbar-nav ml-auto">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <li class="nav-item">
+              <a class="nav-link " href="/#about"><span>Home</span></a>
+            </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <li class="nav-item">
+              <a class="nav-link " href="/#posts"><span>Posts</span></a>
+            </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <li class="nav-item">
+              <a class="nav-link " href="/#contact"><span>Contact</span></a>
+            </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <li class="nav-item">
+              <a class="nav-link " href="/files/cv.pdf"><span>CV</span></a>
+            </li>
+
+
+
+
+
+
+
+
+
+            <li class="nav-item">
+              <a class="nav-link js-search" href="#"><i class="fas fa-search" aria-hidden="true"></i></a>
+            </li>
+
+
+
+
+
+            <li class="nav-item">
+              <a class="nav-link js-dark-toggle" href="#"><i class="fas fa-moon" aria-hidden="true"></i></a>
+            </li>
+
+
+          </ul>
+
         </div>
-        <div class="col-6 col-search-close">
-          <a class="js-search" href="#"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+      </div>
+    </nav>
+
+
+    <article class="article">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <div class="article-container pt-3">
+        <h1>Explore three difference NLP models for Sentiment Analysis: Logistic Regression, LSTM and BERT</h1>
+
+
+
+
+
+
+
+        <div class="article-metadata">
+
+
+
+
+
+          <div>
+
+
+
+
+            <span><a href="/authors/admin/">Nuttapong La-ongtup</a></span>
+
+          </div>
+
+
+
+
+          <span class="article-date">
+
+
+
+
+            Sep 4, 2022
+          </span>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+
+
+      <div class="article-header article-container featured-image-wrapper mt-4 mb-4"
+        style="max-width: 720px; max-height: 480px;">
+        <div style="position: relative">
+          <img
+            src="/post/nlp-sentiment-analysis/featured_hu3d03a01dcc18bc5be0e67db3d8d209a6_1592635_720x0_resize_lanczos_3.png"
+            alt="" class="featured-image">
+
         </div>
       </div>
 
-      <div id="search-box">
-        
-        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
-        autocomplete="off" autocorrect="off" spellcheck="false" type="search">
-        
-      </div>
 
-    </section>
-    <section class="section-search-results">
 
-      <div id="search-hits">
-        
-      </div>
-
-    </section>
-  </div>
-</aside>
-
-
-  
-<nav class="navbar navbar-light fixed-top navbar-expand-lg py-0 compensate-for-scrollbar" id="navbar-main">
-  <div class="container">
-
-    
-      <a class="navbar-brand" href="/">Nuttapong La-ongtup</a>
-      
-      <button type="button" class="navbar-toggler" data-toggle="collapse"
-              data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
-        <span><i class="fas fa-bars"></i></span>
-      </button>
-      
-
-    
-    <div class="collapse navbar-collapse" id="navbar">
-
-      
-      
-      <ul class="navbar-nav ml-auto">
-        
-
-        
-
-        
-        
-        
-          
-        
-
-        
-        
-        
-        
-        
-        
-          
-          
-          
-            
-          
-          
-        
-
-        <li class="nav-item">
-          <a class="nav-link " href="/#about"><span>Home</span></a>
-        </li>
-
-        
-        
-
-        
-
-        
-        
-        
-          
-        
-
-        
-        
-        
-        
-        
-        
-          
-          
-          
-            
-          
-          
-        
-
-        <li class="nav-item">
-          <a class="nav-link " href="/#posts"><span>Posts</span></a>
-        </li>
-
-        
-        
-
-        
-
-        
-        
-        
-          
-        
-
-        
-        
-        
-        
-        
-        
-          
-          
-          
-            
-          
-          
-        
-
-        <li class="nav-item">
-          <a class="nav-link " href="/#contact"><span>Contact</span></a>
-        </li>
-
-        
-        
-
-        
-
-        
-        
-        
-          
-        
-
-        
-        
-        
-        
-        
-        
-
-        <li class="nav-item">
-          <a class="nav-link " href="/files/cv.pdf"><span>CV</span></a>
-        </li>
-
-        
-        
-
-      
-
-        
-
-        
-        <li class="nav-item">
-          <a class="nav-link js-search" href="#"><i class="fas fa-search" aria-hidden="true"></i></a>
-        </li>
-        
-
-        
-
-        
-        <li class="nav-item">
-          <a class="nav-link js-dark-toggle" href="#"><i class="fas fa-moon" aria-hidden="true"></i></a>
-        </li>
-        
-
-      </ul>
-
-    </div>
-  </div>
-</nav>
-
-
-  <article class="article">
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  
-    
-  
-
-
-<div class="article-container pt-3">
-  <h1>Explore three difference NLP models for Sentiment Analysis: Logistic Regression, LSTM and BERT</h1>
-
-  
-
-  
-
-
-
-<div class="article-metadata">
-
-  
-  
-  
-  
-  <div>
-    
-
-
-
-  <span><a href="/authors/admin/">Nuttapong La-ongtup</a></span>
-
-  </div>
-  
-  
-
-  
-  <span class="article-date">
-    
-    
-      
-    
-    Sep 4, 2022
-  </span>
-  
-
-  
-
-  
-
-  
-  
-  
-
-  
-  
-
-  
-    
-
-  
-
-</div>
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-
-
-<div class="article-header article-container featured-image-wrapper mt-4 mb-4" style="max-width: 720px; max-height: 480px;">
-  <div style="position: relative">
-    <img src="/post/nlp-sentiment-analysis/featured_hu3d03a01dcc18bc5be0e67db3d8d209a6_1592635_720x0_resize_lanczos_3.png" alt="" class="featured-image">
-    
-  </div>
-</div>
-
-
-
-  <div class="article-container">
-
-    <div class="article-style">
-      <p>Sentiment Analysis can be useful for businesses to help understand sentiment in customer feedback or review for better understanding and improvement on the products efficiently. We are going to explore three different NLP models for Sentiment Analysis.</p>
-<h3 id="three-models-at-a-glance">Three Models at a Glance</h3>
-<ol>
-<li><strong>Logistic Regression</strong>: A well known simple statistical model that use logistic function to represent probability of an occurrence.</li>
-</ol>
-<p><img src="./logistic-curve.svg" alt="svg" title="The standard logistic function or a sigmoid"></p>
-<ol start="2">
-<li><strong>LSTM</strong>: Long Short-Term Memory (LSTM) developed to solve the memory lost problem of RNN on long sequence of data by providing a short-term memory for RNN that last a lot more, hence, it called <strong>&ldquo;long&rdquo;</strong> short-term memory.</li>
-</ol>
-<p><img src="./rnn_lstm.png" alt="png" title="RNN vs LSTM"></p>
-<ol start="3">
-<li><strong>BERT</strong>: Bidirectional Encoder Representations from Transformers (BERT) developed by research team at Google. They fixed the shortage of training data problem, enable a training process to enormous amount of unannotated text plain text corpus like Wikipedia. Introducing <strong>&ldquo;self-attention&rdquo;</strong> technique, masking out some of the words in the input and predict the masked words and let the predictor use entire context make it truly efficient bidirectional training schema.</li>
-</ol>
-<p><img src="./bert_fine-tuning.png" alt="png" title="Overall pre-training and fine-tuning procedures for BERT"></p>
-<p>For full details about BERT model, refer to this publication: <a href="https://arxiv.org/abs/1810.04805">BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding</a></p>
-<p><strong>Note:</strong> The full codes in this article are in <strong>Google Colab</strong></p>
-<ul>
-<li><a href="https://colab.research.google.com/drive/12n5hppqsJXHo6m3XptR8sz40iaAFnaNS?usp=sharing">Sentiment_Analysis_BERT.ipynb</a></li>
-<li><a href="https://colab.research.google.com/drive/1wQ49e_rx_pZjkbG2I6roR5lWMeRW9Avk?usp=sharing">Sentiment_Analysis_LSTM.ipynb</a></li>
-<li><a href="https://colab.research.google.com/drive/1gX56DN9NQMFfF5nFZdQbwAmijN1TjyFf?usp=sharing">Sentiment_Analysis_Logistic_Regression.ipynb</a></li>
-</ul>
-<h3 id="1-logistic-regression-model-with-tf-idf">1. Logistic Regression Model with TF-IDF</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> pandas <span style="color:#66d9ef">as</span> pd
+      <div class="article-container">
+
+        <div class="article-style">
+          <p>Sentiment Analysis can be useful for businesses to help understand sentiment in customer feedback or review
+            for better understanding and improvement on the products efficiently. We are going to explore three
+            different NLP models for Sentiment Analysis.</p>
+          <h3 id="three-models-at-a-glance">Three Models at a Glance</h3>
+          <ol>
+            <li><strong>Logistic Regression</strong>: A well known simple statistical model that use logistic function
+              to represent probability of an occurrence.</li>
+          </ol>
+          <p><img src="./logistic-curve.svg" alt="svg" title="The standard logistic function or a sigmoid"></p>
+          <ol start="2">
+            <li><strong>LSTM</strong>: Long Short-Term Memory (LSTM) developed to solve the memory lost problem of RNN
+              on long sequence of data by providing a short-term memory for RNN that last a lot more, hence, it called
+              <strong>&ldquo;long&rdquo;</strong> short-term memory.
+            </li>
+          </ol>
+          <p><img src="./rnn_lstm.png" alt="png" title="RNN vs LSTM"></p>
+          <ol start="3">
+            <li><strong>BERT</strong>: Bidirectional Encoder Representations from Transformers (BERT) developed by
+              research team at Google. They fixed the shortage of training data problem, enable a training process to
+              enormous amount of unannotated text plain text corpus like Wikipedia. Introducing
+              <strong>&ldquo;self-attention&rdquo;</strong> technique, masking out some of the words in the input and
+              predict the masked words and let the predictor use entire context make it truly efficient bidirectional
+              training schema.
+            </li>
+          </ol>
+          <p><img src="./bert_fine-tuning.png" alt="png"
+              title="Overall pre-training and fine-tuning procedures for BERT"></p>
+          <p>For full details about BERT model, refer to this publication: <a
+              href="https://arxiv.org/abs/1810.04805">BERT: Pre-training of Deep Bidirectional Transformers for Language
+              Understanding</a></p>
+          <p><strong>Note:</strong> The full codes in this article are in <strong>Google Colab</strong></p>
+          <ul>
+            <li><a
+                href="https://colab.research.google.com/drive/12n5hppqsJXHo6m3XptR8sz40iaAFnaNS?usp=sharing">Sentiment_Analysis_BERT.ipynb</a>
+            </li>
+            <li><a
+                href="https://colab.research.google.com/drive/1wQ49e_rx_pZjkbG2I6roR5lWMeRW9Avk?usp=sharing">Sentiment_Analysis_LSTM.ipynb</a>
+            </li>
+            <li><a
+                href="https://colab.research.google.com/drive/1gX56DN9NQMFfF5nFZdQbwAmijN1TjyFf?usp=sharing">Sentiment_Analysis_Logistic_Regression.ipynb</a>
+            </li>
+          </ul>
+          <h3 id="1-logistic-regression-model-with-tf-idf">1. Logistic Regression Model with TF-IDF</h3>
+          <div class="highlight">
+            <pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> pandas <span style="color:#66d9ef">as</span> pd
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> re
 </span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sklearn.pipeline <span style="color:#f92672">import</span> Pipeline
@@ -598,9 +648,14 @@
 </span></span><span style="display:flex;"><span>fig <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>figure(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">13</span>,<span style="color:#ae81ff">10</span>))
 </span></span><span style="display:flex;"><span>ax1 <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>subplot(<span style="color:#ae81ff">111</span>)
 </span></span><span style="display:flex;"><span>sns<span style="color:#f92672">.</span>heatmap(confusion_matrix, annot<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>, cmap<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Blues&#39;</span>, fmt<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;g&#39;</span>, vmin<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, vmax<span style="color:#f92672">=</span><span style="color:#ae81ff">20</span>)
-</span></span></code></pre></div><p><img src="./confusion_metrix_logistic_regression.png" alt="png"></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>classification_report(compared_df[<span style="color:#e6db74">&#34;label&#34;</span>], compared_df[<span style="color:#e6db74">&#34;pred_label&#34;</span>])
-</span></span></code></pre></div><pre><code>          precision    recall  f1-score   support
+</span></span></code></pre>
+          </div>
+          <p><img src="./confusion_metrix_logistic_regression.png" alt="png"></p>
+          <div class="highlight">
+            <pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>classification_report(compared_df[<span style="color:#e6db74">&#34;label&#34;</span>], compared_df[<span style="color:#e6db74">&#34;pred_label&#34;</span>])
+</span></span></code></pre>
+          </div>
+          <pre><code>          precision    recall  f1-score   support
 
        0       0.59      0.64      0.62        25
        1       0.42      0.43      0.43        23
@@ -612,8 +667,9 @@ accuracy                           0.48       125
 macro avg      0.48      0.49      0.48       125
 weighted avg   0.48      0.48      0.48       125
 </code></pre>
-<h3 id="2-lstm-model">2. LSTM Model</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> spacy
+          <h3 id="2-lstm-model">2. LSTM Model</h3>
+          <div class="highlight">
+            <pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> spacy
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> pandas <span style="color:#66d9ef">as</span> pd
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> re
@@ -848,9 +904,14 @@ weighted avg   0.48      0.48      0.48       125
 </span></span><span style="display:flex;"><span>fig <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>figure(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">13</span>,<span style="color:#ae81ff">10</span>))
 </span></span><span style="display:flex;"><span>ax1 <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>subplot(<span style="color:#ae81ff">111</span>)
 </span></span><span style="display:flex;"><span>sns<span style="color:#f92672">.</span>heatmap(confusion_matrix, annot<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>, cmap<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Blues&#39;</span>, fmt<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;g&#39;</span>, vmin<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, vmax<span style="color:#f92672">=</span><span style="color:#ae81ff">700</span>)
-</span></span></code></pre></div><p><img src="./confusion_metrix_lstm.png" alt="png"></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>classification_report(compared_df[<span style="color:#e6db74">&#34;label&#34;</span>], compared_df[<span style="color:#e6db74">&#34;pred_label&#34;</span>])
-</span></span></code></pre></div><pre><code>          precision    recall  f1-score   support
+</span></span></code></pre>
+          </div>
+          <p><img src="./confusion_metrix_lstm.png" alt="png"></p>
+          <div class="highlight">
+            <pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>classification_report(compared_df[<span style="color:#e6db74">&#34;label&#34;</span>], compared_df[<span style="color:#e6db74">&#34;pred_label&#34;</span>])
+</span></span></code></pre>
+          </div>
+          <pre><code>          precision    recall  f1-score   support
 
        0       0.69      0.72      0.71      2442
        1       0.51      0.46      0.49      2522
@@ -862,8 +923,9 @@ accuracy                           0.56     12500
 macro avg      0.57     0.57       0.57     12500
 weighted avg   0.57     0.56       0.57     12500
 </code></pre>
-<h3 id="3-bert-model">3. BERT model</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> transformers <span style="color:#f92672">import</span> AutoTokenizer, DataCollatorWithPadding
+          <h3 id="3-bert-model">3. BERT model</h3>
+          <div class="highlight">
+            <pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> transformers <span style="color:#f92672">import</span> AutoTokenizer, DataCollatorWithPadding
 </span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> transformers <span style="color:#f92672">import</span> AutoModelForSequenceClassification
 </span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> transformers <span style="color:#f92672">import</span> TrainingArguments
 </span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> transformers <span style="color:#f92672">import</span> TrainingArguments, Trainer
@@ -940,9 +1002,14 @@ weighted avg   0.57     0.56       0.57     12500
 </span></span><span style="display:flex;"><span>fig <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>figure(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">13</span>,<span style="color:#ae81ff">10</span>))
 </span></span><span style="display:flex;"><span>ax1 <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>subplot(<span style="color:#ae81ff">111</span>)
 </span></span><span style="display:flex;"><span>sns<span style="color:#f92672">.</span>heatmap(confusion_matrix, annot<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>, cmap<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Blues&#39;</span>, fmt<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;g&#39;</span>, vmin<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, vmax<span style="color:#f92672">=</span><span style="color:#ae81ff">700</span>)
-</span></span></code></pre></div><p><img src="./confusion_metrix_BERT.png" alt="png"></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>classification_report(compared_df[<span style="color:#e6db74">&#34;label&#34;</span>], compared_df[<span style="color:#e6db74">&#34;pred_label&#34;</span>])
-</span></span></code></pre></div><pre><code>          precision    recall  f1-score   support
+</span></span></code></pre>
+          </div>
+          <p><img src="./confusion_metrix_BERT.png" alt="png"></p>
+          <div class="highlight">
+            <pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>classification_report(compared_df[<span style="color:#e6db74">&#34;label&#34;</span>], compared_df[<span style="color:#e6db74">&#34;pred_label&#34;</span>])
+</span></span></code></pre>
+          </div>
+          <pre><code>          precision    recall  f1-score   support
 
        0       0.74      0.51      0.61      1015
        1       0.45      0.51      0.48      1018
@@ -954,21 +1021,15 @@ accuracy                           0.51      5000
 macro avg     0.54      0.51       0.52      5000
 weighted avg  0.53      0.51       0.52      5000
 </code></pre>
-<h3 id="final-thought">Final thought</h3>
-<p>The results are not so different from each model. It’s good to try a simple model first as a baseline and then to use a more complex model which required a lot of computational resources. Anyway, the Text Classification task is a good way to start learning NLP. I’m glad I’ve explored them. 😀</p>
-<p>Next time I will try the famous Thai language NLP lib called <strong><em>PyThaiNLP</em></strong> for tokenizing, fine-tuning Thai language pre-trained BERT model <strong><em>WangchanBERTa</em></strong>, and utilizing Thai datasets like Wisesight Sentiment corpus. It’s gonna be even more fun! 😁</p>
-<pre tabindex="0"><code></code></pre>
-    </div>
-
-    
-
-
-    
-
-
-
-    
-      
+          <h3 id="final-thought">Final thought</h3>
+          <p>The results are not so different from each model. It’s good to try a simple model first as a baseline and
+            then to use a more complex model which required a lot of computational resources. Anyway, the Text
+            Classification task is a good way to start learning NLP. I’m glad I’ve explored them. 😀</p>
+          <p>Next time I will try the famous Thai language NLP lib called <strong><em>PyThaiNLP</em></strong> for
+            tokenizing, fine-tuning Thai language pre-trained BERT model <strong><em>WangchanBERTa</em></strong>, and
+            utilizing Thai datasets like Wisesight Sentiment corpus. It’s gonna be even more fun! 😁</p>
+          <pre tabindex="0"><code></code></pre>
+        </div>
 
 
 
@@ -977,158 +1038,178 @@ weighted avg  0.53      0.51       0.52      5000
 
 
 
-  
-  
-    
-  
-  
 
 
 
 
 
 
-  
-  
-  
-    
-  
-  
-  <div class="media author-card">
-    
-      
-      <img class="portrait mr-3" src="/authors/admin/avatar_hu6731755d363b532d82bb1744ccd619ab_290514_250x250_fill_q90_lanczos_center.jpg" alt="Avatar">
-    
-
-    <div class="media-body">
-      <h5 class="card-title"><a href="https://nlaongtup.github.io/">Nuttapong La-ongtup</a></h5>
-      
-      <p class="card-text">“If I have seen further it is by standing on the shoulders of Giants” - Isaac Newton</p>
-      <ul class="network-icon" aria-hidden="true">
-        
-          
-          
-          
-            
-          
-          
-          
-          
-          
-          <li>
-            <a href="mailto:nuttapong-laongtup@uacj.co.jp" >
-              <i class="fas fa-envelope"></i>
-            </a>
-          </li>
-        
-          
-          
-          
-            
-          
-          
-          
-          
-          
-            
-          
-          <li>
-            <a href="https://www.linkedin.com/in/nuttapong-la-ongtup-444345140/" target="_blank" rel="noopener">
-              <i class="fab fa-linkedin"></i>
-            </a>
-          </li>
-        
-          
-          
-          
-            
-          
-          
-          
-          
-          
-            
-          
-          <li>
-            <a href="https://github.com/nlaongtup" target="_blank" rel="noopener">
-              <i class="fab fa-github-square"></i>
-            </a>
-          </li>
-        
-          
-          
-          
-            
-          
-          
-          
-          
-          
-            
-          
-          <li>
-            <a href="https://www.facebook.com/harunaoto13" target="_blank" rel="noopener">
-              <i class="fab fa-facebook"></i>
-            </a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
 
 
 
-      
-      
-    
-
-    
-
-    
 
 
-  </div>
-</article>
 
-      
 
-    
-    
 
-    
-    
-    
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
 
-      
 
-      
-        
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js" integrity="sha256-aYTdUrn6Ow1DDgh5JTc3aDGnnju48y/1c8s1dgkYPQ8=" crossorigin="anonymous"></script>
-        
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/r.min.js"></script>
-        
-      
 
-      
-      
-    
 
-    
-    
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.2.0/leaflet.js" integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log==" crossorigin="anonymous"></script>
-    
 
-    
-    
+
+
+
+
+
+
+
+
+        <div class="media author-card">
+
+
+          <img class="portrait mr-3"
+            src="/authors/admin/avatar_hu6731755d363b532d82bb1744ccd619ab_290514_250x250_fill_q90_lanczos_center.jpg"
+            alt="Avatar">
+
+
+          <div class="media-body">
+            <h5 class="card-title"><a href="https://nlaongtup.github.io/">Nuttapong La-ongtup</a></h5>
+
+            <p class="card-text">“If I have seen further it is by standing on the shoulders of Giants” - Isaac Newton
+            </p>
+            <ul class="network-icon" aria-hidden="true">
+
+
+
+
+
+
+
+
+
+
+              <li>
+                <a href="mailto:nuttapong-laongtup@uacj.co.jp">
+                  <i class="fas fa-envelope"></i>
+                </a>
+              </li>
+
+
+
+
+
+
+
+
+
+
+
+
+              <li>
+                <a href="https://www.linkedin.com/in/nuttapong-la-ongtup-444345140/" target="_blank" rel="noopener">
+                  <i class="fab fa-linkedin"></i>
+                </a>
+              </li>
+
+
+
+
+
+
+
+
+
+
+
+
+              <li>
+                <a href="https://github.com/nlaongtup" target="_blank" rel="noopener">
+                  <i class="fab fa-github-square"></i>
+                </a>
+              </li>
+
+
+
+
+
+
+
+
+
+
+
+
+              <li>
+                <a href="https://www.facebook.com/harunaoto13" target="_blank" rel="noopener">
+                  <i class="fab fa-facebook"></i>
+                </a>
+              </li>
+
+            </ul>
+          </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+    </article>
+
+
+
+
+
+
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js"
+      integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js"
+      integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js"
+      integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+
+
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"
+      integrity="sha256-aYTdUrn6Ow1DDgh5JTc3aDGnnju48y/1c8s1dgkYPQ8=" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/languages/r.min.js"></script>
+
+
+
+
+
+
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.2.0/leaflet.js"
+      integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log=="
+      crossorigin="anonymous"></script>
+
+
+
+
     <script>hljs.initHighlightingOnLoad();</script>
-    
 
-    
-    
+
+
+
     <script>
       const search_index_filename = "/index.json";
       const i18n = {
@@ -1139,17 +1220,17 @@ weighted avg  0.53      0.51       0.52      5000
       const content_type = {
         'post': "Posts",
         'project': "Projects",
-        'publication' : "Publications",
-        'talk' : "Talks"
-        };
+        'publication': "Publications",
+        'talk': "Talks"
+      };
     </script>
-    
 
-    
-    
 
-    
-    
+
+
+
+
+
     <script id="search-hit-fuse-template" type="text/x-template">
       <div class="search-hit" id="summary-{{key}}">
       <div class="search-hit-content">
@@ -1161,95 +1242,98 @@ weighted avg  0.53      0.51       0.52      5000
       </div>
       </div>
     </script>
-    
 
-    
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
-    
 
-    
-    
 
-    
-    
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-      
-    
-    
-    
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js"
+      integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js"
+      integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <script src="/js/academic.min.c457960e56be5ee39cebb84e118b10c1.js"></script>
 
-    
 
 
 
 
 
 
-  
-  <div class="container">
-    <footer class="site-footer">
-  
 
-  <p class="powered-by">
-    
 
-    Powered by the
-    <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
-    <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+    <div class="container">
+      <footer class="site-footer">
 
-    
-    <span class="float-right" aria-hidden="true">
-      <a href="#" id="back_to_top">
-        <span class="button_icon">
-          <i class="fas fa-chevron-up fa-2x"></i>
-        </span>
-      </a>
-    </span>
-    
-  </p>
-</footer>
 
-  </div>
-  
+        <p class="powered-by">
 
-  
-<div id="modal" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Cite</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <pre><code class="tex hljs"></code></pre>
-      </div>
-      <div class="modal-footer">
-        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
-          <i class="fas fa-copy"></i> Copy
-        </a>
-        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
-          <i class="fas fa-download"></i> Download
-        </a>
-        <div id="modal-error"></div>
+
+          Powered by the
+          <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Academic theme</a> for
+          <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+
+
+          <span class="float-right" aria-hidden="true">
+            <a href="#" id="back_to_top">
+              <span class="button_icon">
+                <i class="fas fa-chevron-up fa-2x"></i>
+              </span>
+            </a>
+          </span>
+
+        </p>
+      </footer>
+
+    </div>
+
+
+
+    <div id="modal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Cite</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <pre><code class="tex hljs"></code></pre>
+          </div>
+          <div class="modal-footer">
+            <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+              <i class="fas fa-copy"></i> Copy
+            </a>
+            <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+              <i class="fas fa-download"></i> Download
+            </a>
+            <div id="modal-error"></div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
-</body>
+  </body>
+
 </html>
