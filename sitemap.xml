@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>https://nlaongtup.github.io/authors/admin/</loc>
+    <lastmod>2021-04-19T00:01:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://nlaongtup.github.io/authors/</loc>
+    <lastmod>2021-04-19T00:01:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://nlaongtup.github.io/post/aws-recognition-api/</loc>
+    <lastmod>2021-04-19T00:01:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://nlaongtup.github.io/</loc>
+    <lastmod>2021-04-19T00:01:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://nlaongtup.github.io/post/</loc>
+    <lastmod>2021-04-19T00:01:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://nlaongtup.github.io/post/tensorflow-keras/</loc>
+    <lastmod>2021-04-15T00:02:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://nlaongtup.github.io/post/scipy-lammps/</loc>
+    <lastmod>2019-10-06T00:03:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://nlaongtup.github.io/categories/</loc>
+  </url>
+  
+  <url>
+    <loc>https://nlaongtup.github.io/publication_types/</loc>
+  </url>
+  
+  <url>
+    <loc>https://nlaongtup.github.io/publication/</loc>
+  </url>
+  
+  <url>
+    <loc>https://nlaongtup.github.io/talk/</loc>
+  </url>
+  
+  <url>
+    <loc>https://nlaongtup.github.io/tags/</loc>
+  </url>
+  
+</urlset>
